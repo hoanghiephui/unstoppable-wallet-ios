@@ -1,18 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "main@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "main@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "app_icon_main.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

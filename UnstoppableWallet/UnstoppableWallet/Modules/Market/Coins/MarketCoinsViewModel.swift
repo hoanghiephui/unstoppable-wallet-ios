@@ -20,7 +20,7 @@ class MarketCoinsViewModel: ObservableObject {
 
     @Published var state: State = .loading
 
-    var sortBy: MarketModule.SortBy = .gainers {
+    var sortBy: MarketModule.SortBy = .highestCap {
         didSet {
             stat(page: .markets, section: .coins, event: .switchSortType(sortType: sortBy.statSortType))
             syncState()
