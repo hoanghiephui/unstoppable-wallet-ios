@@ -13,7 +13,7 @@ CoinDex is a powerful non-custodial multi-wallet for Bitcoin, Ethereum, Binance 
 
 Such approach enables the wallet to operate anywhere and remain censorship-resistant. Only the user is in control of the money.
 
-More at [https://coinde.money](https://coindex.money)
+More at [https://coindex.money](https://coindex.money)
 
 ## Download
 
