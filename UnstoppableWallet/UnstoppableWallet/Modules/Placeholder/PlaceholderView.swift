@@ -58,8 +58,7 @@ class PlaceholderView: UIView {
         }
 
         imageView.contentMode = .center
-        imageView.cornerRadius = 50
-        imageView.backgroundColor = .themeSteel10
+        
 
         stackView.addArrangedSubview(label)
 
@@ -77,7 +76,11 @@ class PlaceholderView: UIView {
 
     var image: UIImage? {
         get { imageView.image }
-        set { imageView.image = newValue?.withTintColor(.themeGray) }
+        set {
+            imageView.cornerRadius = 50
+            imageView.backgroundColor = .themeSteel10
+            imageView.image = newValue?.withTintColor(.themeGray)
+        }
     }
 
     var text: String? {

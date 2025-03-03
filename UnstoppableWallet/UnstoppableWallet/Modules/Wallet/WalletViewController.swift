@@ -37,6 +37,7 @@ class WalletViewController: ThemeViewController {
     private var isLoaded = false
 
     private let queue = DispatchQueue(label: "\(AppConfig.label).wallet_view_controller", qos: .userInitiated)
+    private let radialBackgroundView = RadialBackgroundView(background: .themeHelsing)
 
     init(viewModel: WalletViewModel) {
         self.viewModel = viewModel
@@ -80,34 +81,87 @@ class WalletViewController: ThemeViewController {
         tableView.registerCell(forClass: PlaceholderCell.self)
         tableView.registerHeaderFooter(forClass: WalletHeaderView.self)
         tableView.registerHeaderFooter(forClass: SectionColorHeader.self)
-
-        view.addSubview(placeholderView)
-        placeholderView.snp.makeConstraints { maker in
-            maker.edges.equalTo(view.safeAreaLayoutGuide)
+        
+        // Cấu hình nền radial gradient
+        view.addSubview(radialBackgroundView)
+        radialBackgroundView.snp.makeConstraints { maker in
+            maker.edges.equalToSuperview()
         }
+        view.addSubview(placeholderView)
+            placeholderView.snp.makeConstraints { maker in
+                maker.edges.equalTo(view.safeAreaLayoutGuide)
+            }
 
-        placeholderView.image = UIImage(named: "add_to_wallet_48")
+        // Tạo container cho column
+        let columnView = UIStackView()
+        columnView.axis = .vertical
+        columnView.alignment = .leading
+        columnView.distribution = .fill
+        columnView.spacing = 16 // Khoảng cách giữa các phần tử
 
-        placeholderView.addPrimaryButton(
-            style: .yellow,
-            title: "onboarding.balance.create".localized,
-            target: self,
-            action: #selector(onTapCreate)
-        )
-
-        placeholderView.addPrimaryButton(
+        placeholderView.addSubview(columnView)
+        columnView.snp.makeConstraints { maker in
+            maker.center.equalToSuperview()
+            maker.leading.trailing.equalToSuperview().inset(16) // Padding ngang 16pt
+        }
+        
+        // 1. Hình ảnh
+        let imageView = UIImageView(image: UIImage(named: "img_start"))
+        imageView.contentMode = .scaleAspectFit
+        columnView.addArrangedSubview(imageView)
+        
+        // 2. Tiêu đề
+        let titleLabel = UILabel()
+        titleLabel.text = "Wallet Setup"
+        titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
+        titleLabel.textColor = .black
+        titleLabel.textAlignment = .left
+        columnView.addArrangedSubview(titleLabel)
+        titleLabel.snp.makeConstraints {maker in
+            maker.width
+                .equalToSuperview()
+        }
+        columnView.setCustomSpacing(32, after: imageView)
+        
+        // 3. Mô tả
+        let descriptionLabel = UILabel()
+        descriptionLabel.text = "Import an existing wallet\nor create a new one"
+        descriptionLabel.font = .systemFont(ofSize: 16)
+        descriptionLabel.textColor = .darkGray
+        descriptionLabel.numberOfLines = 0
+        descriptionLabel.textAlignment = .left
+        columnView.addArrangedSubview(descriptionLabel)
+        descriptionLabel.snp.makeConstraints {maker in
+            maker.width
+                .equalToSuperview()
+        }
+        
+        // 4. Nút Import
+        let importButton = placeholderView.addPrimaryButton(
             style: .gray,
             title: "onboarding.balance.import".localized,
             target: self,
             action: #selector(onTapRestore)
         )
-
-        placeholderView.addPrimaryButton(
-            style: .transparent,
-            title: "onboarding.balance.watch".localized,
+        importButton.layer.cornerRadius = 8
+        columnView.addArrangedSubview(importButton) // Thêm vào columnView
+        importButton.snp.makeConstraints { maker in
+            maker.width.equalToSuperview() // Full width của columnView
+        }
+        columnView.setCustomSpacing(50, after: descriptionLabel)
+        
+        // 5. Nút Create
+        let createButton = placeholderView.addPrimaryButton(
+            style: .yellow,
+            title: "onboarding.balance.create".localized,
             target: self,
-            action: #selector(onTapWatch)
+            action: #selector(onTapCreate)
         )
+        createButton.layer.cornerRadius = 8
+        columnView.addArrangedSubview(createButton) // Thêm vào columnView
+        createButton.snp.makeConstraints { maker in
+            maker.width.equalToSuperview() // Full width của columnView
+        }
 
         view.addSubview(spinner)
         spinner.snp.makeConstraints { make in
@@ -271,11 +325,15 @@ class WalletViewController: ThemeViewController {
         switch state {
         case .noAccount:
             placeholderView.isHidden = false
+            radialBackgroundView.isHidden = false
             navigationItem.leftBarButtonItem = nil
+            navigationController?.setNavigationBarHidden(true, animated: true)
         default:
             placeholderView.isHidden = true
+            radialBackgroundView.isHidden = true
             navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "switch_wallet_24"), style: .plain, target: self, action: #selector(onTapSwitchWallet))
             navigationItem.leftBarButtonItem?.tintColor = .themeJacob
+            navigationController?.setNavigationBarHidden(false, animated: true)
         }
 
         switch state {
