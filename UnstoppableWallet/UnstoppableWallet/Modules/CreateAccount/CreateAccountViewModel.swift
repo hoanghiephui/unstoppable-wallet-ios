@@ -13,10 +13,11 @@ class CreateAccountViewModel {
     private let clearInputsRelay = PublishRelay<Void>()
     private let showErrorRelay = PublishRelay<String>()
     private let finishRelay = PublishRelay<Void>()
+    var isPassphraseEnabled: Bool = true
 
     init(service: CreateAccountService) {
         self.service = service
-
+        onTogglePassphrase(isOn: isPassphraseEnabled)
         subscribe(disposeBag, service.wordCountObservable) { [weak self] in self?.sync(wordCount: $0) }
 
         sync(wordCount: service.wordCount)

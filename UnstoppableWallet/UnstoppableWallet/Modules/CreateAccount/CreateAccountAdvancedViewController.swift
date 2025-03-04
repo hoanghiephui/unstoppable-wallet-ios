@@ -71,20 +71,25 @@ class CreateAccountAdvancedViewController: KeyboardAwareViewController {
 
         let namePlaceholder = viewModel.namePlaceholder
         nameCell.inputText = namePlaceholder
-        nameCell.inputPlaceholder = namePlaceholder
+        nameCell.inputPlaceholder = "Input to name your wallet"
         nameCell.autocapitalizationType = .words
         nameCell.onChangeText = { [weak self] in self?.viewModel.onChange(name: $0 ?? "") }
 
-        mnemonicCell.set(backgroundStyle: .lawrence, isFirst: true, isLast: true)
+        mnemonicCell.set(backgroundStyle: .transparent, isFirst: true, isLast: false)
 
-        passphraseToggleCell.set(backgroundStyle: .lawrence, isFirst: true, isLast: true)
+        passphraseToggleCell.set(backgroundStyle: .transparent, isFirst: true, isLast: false)
         CellBuilderNew.buildStatic(
             cell: passphraseToggleCell,
             rootElement: .hStack(
                 tableView.universalImage24Elements(
                     image: .local(UIImage(named: "key_phrase_24")?.withTintColor(.themeGray)),
                     title: .body("create_wallet.passphrase".localized),
-                    accessoryType: .switch { [weak self] in self?.viewModel.onTogglePassphrase(isOn: $0) }
+                    accessoryType: .switch (
+                        isOn: viewModel.isPassphraseEnabled,
+                        onSwitch: {
+                            [weak self] in self?.viewModel.onTogglePassphrase(isOn: $0)
+                        }
+                    )
                 )
             )
         )

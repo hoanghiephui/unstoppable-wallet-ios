@@ -69,7 +69,7 @@ class CreateAccountSimpleViewController: KeyboardAwareViewController {
 
         let namePlaceholder = viewModel.namePlaceholder
         nameCell.inputText = namePlaceholder
-        nameCell.inputPlaceholder = namePlaceholder
+        nameCell.inputPlaceholder = "Input to name your wallet"
         nameCell.autocapitalizationType = .words
         nameCell.onChangeText = { [weak self] in self?.viewModel.onChange(name: $0 ?? "") }
 

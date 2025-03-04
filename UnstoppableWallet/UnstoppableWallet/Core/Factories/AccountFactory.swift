@@ -14,7 +14,7 @@ extension AccountFactory {
         let nonWatchAccounts = accountManager.accounts.filter { !$0.watchAccount }
         let order = nonWatchAccounts.count + 1
 
-        return "Wallet \(order)"
+        return "CoinDex Wallet \(order)"
     }
 
     func nextAccountName(cex: Cex) -> String {
@@ -33,7 +33,7 @@ extension AccountFactory {
         let watchAccounts = accountManager.accounts.filter(\.watchAccount)
         let order = watchAccounts.count + 1
 
-        return "Watch Wallet \(order)"
+        return "CoinDex Watch Wallet \(order)"
     }
 
     func account(type: AccountType, origin: AccountOrigin, backedUp: Bool, fileBackedUp: Bool, name: String) -> Account {
